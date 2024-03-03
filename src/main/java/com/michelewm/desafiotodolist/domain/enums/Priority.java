@@ -21,6 +21,6 @@ public enum Priority {
                 return valuePriority;
             }
         }
-        throw new IllegalArgumentException("Invalid priority code");
+        throw new IllegalArgumentException("Invalid Priority code" + code);
     }
 }
