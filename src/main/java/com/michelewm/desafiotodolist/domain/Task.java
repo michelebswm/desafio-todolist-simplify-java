@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.michelewm.desafiotodolist.domain.enums.Priority;
 import com.michelewm.desafiotodolist.domain.enums.TaskStatus;
+import com.michelewm.desafiotodolist.dtos.TaskDTO;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -47,4 +48,11 @@ public class Task {
 
     @Enumerated(EnumType.ORDINAL)
     private TaskStatus taskStatus;
+
+    public Task(TaskDTO taskDto){
+        this.title = taskDto.title();
+        this.description = taskDto.description();
+        this.priority = taskDto.priority();
+        this.taskStatus = taskDto.taskStatus();
+    }
 }   
