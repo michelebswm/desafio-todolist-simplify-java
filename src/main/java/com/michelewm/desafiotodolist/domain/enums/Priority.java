@@ -3,7 +3,7 @@ package com.michelewm.desafiotodolist.domain.enums;
 public enum Priority {
     HIGH(1),
     AVERAGE(2),
-    LOW(3)
+    LOW(3);
 
     private int code;
 
