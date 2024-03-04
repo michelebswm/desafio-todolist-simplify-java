@@ -33,6 +33,18 @@ public class TaskService {
         return repository.save(newTask);
     }
 
+    public Task update(Long id, TaskDTO taskData){
+        Task task = getTaskById(id);
+        
+        validateTasks(taskData.taskStatus(), taskData.done());
+        if (!task.getTitle().isEmpty())  task.setTitle(taskData.title());
+        if (!task.getDescription().isEmpty()) task.setDescription(taskData.description());
+        if (!(task.getPriority() == null)) task.setPriority(taskData.priority());  
+        if (!(task.getTaskStatus() == null)) task.setTaskStatus(taskData.taskStatus());
+        task.setDone(taskData.done());  
+        return repository.save(task) ;
+    }
+
     public void validateTasks(TaskStatus taskStatus, Boolean done){
         if (taskStatus.getCode() == 2 && done == false){
             throw new ValidationTaskException("Status DONE precisa ser marcado como concluído");
