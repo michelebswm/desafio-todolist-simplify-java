@@ -7,9 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.michelewm.desafiotodolist.domain.Task;
+import com.michelewm.desafiotodolist.domain.enums.Priority;
+import com.michelewm.desafiotodolist.domain.enums.TaskStatus;
 import com.michelewm.desafiotodolist.dtos.TaskDTO;
 import com.michelewm.desafiotodolist.repositories.TaskRepository;
 import com.michelewm.desafiotodolist.services.exceptions.ResourceNotFoundException;
+import com.michelewm.desafiotodolist.services.exceptions.ValidationTaskException;
 
 @Service
 public class TaskService {
@@ -25,7 +28,17 @@ public class TaskService {
     }
 
     public Task insert(TaskDTO taskData){
+        validateTasks(taskData.taskStatus(), taskData.done());
         Task newTask = new Task(taskData);
         return repository.save(newTask);
+    }
+
+    public void validateTasks(TaskStatus taskStatus, Boolean done){
+        if (taskStatus.getCode() == 2 && done == false){
+            throw new ValidationTaskException("Status DONE precisa ser marcado como concluído");
+        }
+        if (done == true && taskStatus.getCode() != 2){
+            throw new ValidationTaskException("O status CONCLUÍDO só pode ser usado para tarefas finalizadas");
+        }
     }
 }

@@ -54,5 +54,6 @@ public class Task {
         this.description = taskDto.description();
         this.priority = taskDto.priority();
         this.taskStatus = taskDto.taskStatus();
+        this.isDone = taskDto.done();
     }
 }   
