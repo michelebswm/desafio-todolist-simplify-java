@@ -1,13 +1,13 @@
 package com.michelewm.desafiotodolist.domain.enums;
 
 public enum Priority {
-    HIGH(1),
-    AVERAGE(2),
-    LOW(3);
+    HIGH(0),
+    AVERAGE(1),
+    LOW(2);
 
     private int code;
 
-    Priority(int code){
+    private Priority(int code){
         this.code = code;
     }
 
