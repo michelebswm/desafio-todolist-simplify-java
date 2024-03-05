@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.michelewm.desafiotodolist.controllers.util.URL;
 import com.michelewm.desafiotodolist.domain.Task;
 import com.michelewm.desafiotodolist.dtos.TaskDTO;
 import com.michelewm.desafiotodolist.services.TaskService;
@@ -66,5 +67,12 @@ public class TaskController {
     public ResponseEntity<List<Task>> findByIsDone(@RequestParam(name = "done") boolean done){
         List<Task> tasks = service.findByIsDone(done);
         return  ResponseEntity.ok().body(tasks);
+    }
+
+    @GetMapping("/titlesearch")
+    public ResponseEntity<List<Task>> findByTitleContainingIgnoreCase(@RequestParam(value = "text", defaultValue = "") String text){
+        text = URL.decodeParam(text);
+        List<Task> tasks = service.findByTitleContainingIgnoreCase(text);
+        return ResponseEntity.ok().body(tasks);
     }
 }

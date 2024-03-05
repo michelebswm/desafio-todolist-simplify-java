@@ -54,6 +54,10 @@ public class TaskService {
         return repository.findByIsDone(done);
     }
 
+    public List<Task> findByTitleContainingIgnoreCase(String title){
+        return  repository.findByTitleContainingIgnoreCase(title);
+    }
+
     public void validateTasks(TaskStatus taskStatus, Boolean done){
         if (taskStatus.getCode() == 2 && done == false){
             throw new ValidationTaskException("Status DONE precisa ser marcado como concluído");
