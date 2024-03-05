@@ -58,6 +58,10 @@ public class TaskService {
         return  repository.findByTitleContainingIgnoreCase(title);
     }
 
+    public List<Task> findByPriority(Priority priority) {
+        return repository.findByPriority(priority);
+    }
+
     public void validateTasks(TaskStatus taskStatus, Boolean done){
         if (taskStatus.getCode() == 2 && done == false){
             throw new ValidationTaskException("Status DONE precisa ser marcado como concluído");

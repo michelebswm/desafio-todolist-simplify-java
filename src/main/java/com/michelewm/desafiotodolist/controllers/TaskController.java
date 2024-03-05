@@ -18,8 +18,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.michelewm.desafiotodolist.controllers.util.URL;
 import com.michelewm.desafiotodolist.domain.Task;
+import com.michelewm.desafiotodolist.domain.enums.Priority;
 import com.michelewm.desafiotodolist.dtos.TaskDTO;
 import com.michelewm.desafiotodolist.services.TaskService;
+import com.michelewm.desafiotodolist.services.exceptions.ValidationTaskException;
 
 import jakarta.validation.Valid;
 
@@ -75,4 +77,17 @@ public class TaskController {
         List<Task> tasks = service.findByTitleContainingIgnoreCase(text);
         return ResponseEntity.ok().body(tasks);
     }
+
+    @GetMapping("/priority")
+    public ResponseEntity<List<Task>> findByPriority(@RequestParam(value = "priority") String priority) {
+        try{
+        priority = URL.decodeParam(priority);
+        Priority priorityEnum = Priority.valueOf(priority.toUpperCase());
+        List<Task> tasks = service.findByPriority(priorityEnum);
+        return ResponseEntity.status(HttpStatus.OK).body(tasks);
+        }catch(IllegalArgumentException ex){
+            throw new ValidationTaskException("Invalid priority" + ex.getMessage());  
+        }
+    }
+    
 }
