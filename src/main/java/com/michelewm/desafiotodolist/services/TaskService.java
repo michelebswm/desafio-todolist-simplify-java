@@ -49,6 +49,10 @@ public class TaskService {
         Task task = getTaskById(id);
         repository.delete(task);
     }
+    
+    public List<Task> findByIsDone(boolean done){
+        return repository.findByIsDone(done);
+    }
 
     public void validateTasks(TaskStatus taskStatus, Boolean done){
         if (taskStatus.getCode() == 2 && done == false){

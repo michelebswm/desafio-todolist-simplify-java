@@ -62,4 +62,9 @@ public class TaskController {
         return ResponseEntity.noContent().build();
     }
     
+    @GetMapping("/completed")
+    public ResponseEntity<List<Task>> findByIsDone(@RequestParam(name = "done") boolean done){
+        List<Task> tasks = service.findByIsDone(done);
+        return  ResponseEntity.ok().body(tasks);
+    }
 }
