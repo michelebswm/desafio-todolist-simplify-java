@@ -45,6 +45,11 @@ public class TaskService {
         return repository.save(task) ;
     }
 
+    public void delete(Long id){
+        Task task = getTaskById(id);
+        repository.delete(task);
+    }
+
     public void validateTasks(TaskStatus taskStatus, Boolean done){
         if (taskStatus.getCode() == 2 && done == false){
             throw new ValidationTaskException("Status DONE precisa ser marcado como concluído");
