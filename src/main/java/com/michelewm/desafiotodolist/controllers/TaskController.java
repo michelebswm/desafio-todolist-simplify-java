@@ -27,12 +27,15 @@ import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.RequestParam;
 
-
 @RestController
 @RequestMapping("/api/tasks")
 public class TaskController {
-    @Autowired
+
     private TaskService service;
+
+    public TaskController(TaskService service) {
+        this.service = service;
+    }
 
     @GetMapping
     public ResponseEntity<List<Task>> getAllTasks() {
@@ -47,32 +50,34 @@ public class TaskController {
     }
 
     @PostMapping
-    public ResponseEntity<Task> insert(@RequestBody @Valid TaskDTO taskData){
+    public ResponseEntity<Task> insert(@RequestBody @Valid TaskDTO taskData) {
         Task newTask = service.insert(taskData);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newTask.getId()).toUri();
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newTask.getId())
+                .toUri();
         return ResponseEntity.created(uri).body(newTask);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Task> update(@PathVariable Long id, @RequestBody @Valid TaskDTO taskData){
+    public ResponseEntity<Task> update(@PathVariable Long id, @RequestBody @Valid TaskDTO taskData) {
         Task updatedTask = service.update(id, taskData);
         return ResponseEntity.status(HttpStatus.OK).body(updatedTask);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id){
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
-    
+
     @GetMapping("/completed")
-    public ResponseEntity<List<Task>> findByIsDone(@RequestParam(name = "done") boolean done){
+    public ResponseEntity<List<Task>> findByIsDone(@RequestParam(name = "done") boolean done) {
         List<Task> tasks = service.findByIsDone(done);
-        return  ResponseEntity.ok().body(tasks);
+        return ResponseEntity.ok().body(tasks);
     }
 
     @GetMapping("/titlesearch")
-    public ResponseEntity<List<Task>> findByTitleContainingIgnoreCase(@RequestParam(value = "text", defaultValue = "") String text){
+    public ResponseEntity<List<Task>> findByTitleContainingIgnoreCase(
+            @RequestParam(value = "text", defaultValue = "") String text) {
         text = URL.decodeParam(text);
         List<Task> tasks = service.findByTitleContainingIgnoreCase(text);
         return ResponseEntity.ok().body(tasks);
@@ -80,14 +85,14 @@ public class TaskController {
 
     @GetMapping("/priority")
     public ResponseEntity<List<Task>> findByPriority(@RequestParam(value = "priority") String priority) {
-        try{
-        priority = URL.decodeParam(priority);
-        Priority priorityEnum = Priority.valueOf(priority.toUpperCase());
-        List<Task> tasks = service.findByPriority(priorityEnum);
-        return ResponseEntity.status(HttpStatus.OK).body(tasks);
-        }catch(IllegalArgumentException ex){
-            throw new ValidationTaskException("Invalid priority" + ex.getMessage());  
+        try {
+            priority = URL.decodeParam(priority);
+            Priority priorityEnum = Priority.valueOf(priority.toUpperCase());
+            List<Task> tasks = service.findByPriority(priorityEnum);
+            return ResponseEntity.status(HttpStatus.OK).body(tasks);
+        } catch (IllegalArgumentException ex) {
+            throw new ValidationTaskException("Invalid priority" + ex.getMessage());
         }
     }
-    
+
 }
