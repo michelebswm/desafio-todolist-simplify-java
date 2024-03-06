@@ -35,7 +35,7 @@ public class TaskService {
     }
 
     public Task insert(TaskDTO taskData) {
-        validateTasks(taskData.taskStatus(), taskData.done());
+        validateTasks(TaskStatus.valueOf(taskData.taskStatus()), taskData.done());
         Task newTask = new Task(taskData);
         return repository.save(newTask);
     }
@@ -43,15 +43,15 @@ public class TaskService {
     public Task update(Long id, TaskDTO taskData) {
         Task task = getTaskById(id);
 
-        validateTasks(taskData.taskStatus(), taskData.done());
+        validateTasks(TaskStatus.valueOf(taskData.taskStatus()), taskData.done());
         if (!task.getTitle().isEmpty())
             task.setTitle(taskData.title());
         if (!task.getDescription().isEmpty())
             task.setDescription(taskData.description());
         if (!(task.getPriority() == null))
-            task.setPriority(taskData.priority());
+            task.setPriority(Priority.valueOf(taskData.priority()));
         if (!(task.getTaskStatus() == null))
-            task.setTaskStatus(taskData.taskStatus());
+            task.setTaskStatus(TaskStatus.valueOf(taskData.taskStatus()));
         task.setDone(taskData.done());
         return repository.save(task);
     }

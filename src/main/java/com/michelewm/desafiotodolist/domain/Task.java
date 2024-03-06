@@ -2,7 +2,6 @@ package com.michelewm.desafiotodolist.domain;
 
 import java.time.LocalDateTime;
 
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.michelewm.desafiotodolist.domain.enums.Priority;
 import com.michelewm.desafiotodolist.domain.enums.TaskStatus;
@@ -32,28 +31,37 @@ import lombok.Setter;
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long  id;
-    @Column(nullable =  false, length=250)
+    private Long id;
+    @Column(nullable = false, length = 250)
     private String title;
     private String description;
-    
-    @Column(columnDefinition="TINYINT NOT NULL DEFAULT 0", name ="is_done")
+
+    @Column(columnDefinition = "TINYINT NOT NULL DEFAULT 0", name = "is_done")
     private boolean isDone;
 
     @Enumerated(EnumType.ORDINAL)
-    private Priority  priority;
+    private Priority priority;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-    private LocalDateTime  creationDate = LocalDateTime.now();
+    private LocalDateTime creationDate = LocalDateTime.now();
 
     @Enumerated(EnumType.ORDINAL)
     private TaskStatus taskStatus;
 
-    public Task(TaskDTO taskDto){
+    public Task(String title, String description, boolean isDone, Priority priority, TaskStatus taskStatus) {
+        this.title = title;
+        this.description = description;
+        this.isDone = isDone;
+        this.priority = priority;
+        this.taskStatus = taskStatus;
+    }
+
+    public Task(TaskDTO taskDto) {
         this.title = taskDto.title();
         this.description = taskDto.description();
-        this.priority = taskDto.priority();
-        this.taskStatus = taskDto.taskStatus();
+        this.priority = Priority.valueOf(taskDto.priority());
+        this.taskStatus = TaskStatus.valueOf(taskDto.taskStatus());
         this.isDone = taskDto.done();
     }
-}   
+
+}
