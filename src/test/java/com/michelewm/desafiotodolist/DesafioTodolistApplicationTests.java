@@ -40,6 +40,13 @@ class DesafioTodolistApplicationTests {
 
 	@Test
 	void testCreateTaskFailure() {
+		var task = new Task(new TaskDTO("", "", "LOW", "TODO", false));
+		webTestClient
+				.post()
+				.uri("/api/tasks")
+				.bodyValue(task)
+				.exchange()
+				.expectStatus().isBadRequest();
 	}
 
 }
